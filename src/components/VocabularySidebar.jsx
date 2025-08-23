@@ -31,12 +31,33 @@ export default function VocabularySidebar({ lesson }) {
     try { window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch {}
   };
 
+  const genderFromPos = (pos = "") => {
+    const p = String(pos).toLowerCase();
+    if (p.includes("m/f")) return "m/f";
+    if (p.includes("(m)")) return "m.";
+    if (p.includes("(f)")) return "f.";
+    return "";
+  };
+  const getGender = (item) => {
+    const g = item.gender || genderFromPos(item.pos);
+    // Normalize: show as m., f., or m/f
+    if (!g) return "";
+    if (g === "m" || g === "m.") return "m.";
+    if (g === "f" || g === "f.") return "f.";
+    return g; // e.g., m/f
+  };
+
   const filtered = vocab
-    .filter((v) =>
-      v.fr.toLowerCase().includes(search.toLowerCase()) ||
-      v.pl.toLowerCase().includes(search.toLowerCase()) ||
-      (v.ipa || "").toLowerCase().includes(search.toLowerCase())
-    )
+    .filter((v) => {
+      const q = search.toLowerCase();
+      const g = (getGender(v) || "").toLowerCase();
+      return (
+        v.fr.toLowerCase().includes(q) ||
+        v.pl.toLowerCase().includes(q) ||
+        (v.ipa || "").toLowerCase().includes(q) ||
+        g.includes(q)
+      );
+    })
     .sort((a, b) => (Number(!!mastered[a.fr]) - Number(!!mastered[b.fr])) || a.fr.localeCompare(b.fr));
 
   const renderIPA = (ipa) => {
@@ -55,7 +76,7 @@ export default function VocabularySidebar({ lesson }) {
       <input
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Szukaj… (FR/PL/IPA)"
+        placeholder="Szukaj… (FR/PL/IPA/płeć)"
         className="w-full mb-2 px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400"
       />
       <ul className="space-y-2 max-h-[50vh] overflow-auto pr-1">
@@ -65,11 +86,18 @@ export default function VocabularySidebar({ lesson }) {
               <div className="text-sm font-semibold leading-tight">{item.fr}</div>
               <div className="text-xs text-slate-600">{item.pl}</div>
               {renderIPA(item.ipa)}
-              {item.pos && (
-                <span className="text-[10px] mt-0.5 inline-block px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200">
-                  {item.pos}
-                </span>
-              )}
+              <div className="mt-0.5 flex gap-1 flex-wrap">
+                {item.pos && (
+                  <span className="text-[10px] inline-block px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200">
+                    {item.pos}
+                  </span>
+                )}
+                {getGender(item) && (
+                  <span className="text-[10px] inline-block px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    {getGender(item)}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="flex items-center gap-1">
               <button
