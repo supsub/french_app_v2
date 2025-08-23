@@ -123,6 +123,7 @@ function PracticePanel({ lesson }) {
 
   // TTS
   const [voices, setVoices] = useState([]);
+  const [showNote, setShowNote] = useState(false);
   useEffect(() => {
     if (!("speechSynthesis" in window)) return;
     const load = () => setVoices(window.speechSynthesis.getVoices());
@@ -130,6 +131,9 @@ function PracticePanel({ lesson }) {
     window.speechSynthesis.onvoiceschanged = load;
     return () => { if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = null; };
   }, []);
+  // Reset hint visibility when changing sentence or lesson
+  useEffect(() => { setShowNote(false); }, [index, lesson.id]);
+
   const speakFrench = (text) => {
     if (!("speechSynthesis" in window)) return;
     const u = new SpeechSynthesisUtterance(text);
@@ -196,8 +200,13 @@ function PracticePanel({ lesson }) {
       )}
 
       <div className="mt-5 p-4 rounded-2xl border bg-slate-50">
-        <div className="text-xs uppercase tracking-wide text-slate-500 mb-1">Wyjaśnienie trudności</div>
-        <div className="text-sm text-slate-800" dangerouslySetInnerHTML={{ __html: task.note }} />
+        <div className="flex items-center justify-between">
+          <div className="text-xs uppercase tracking-wide text-slate-500">Wyjaśnienie trudności</div>
+          <button onClick={() => setShowNote((v) => !v)} className="text-xs px-2 py-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-100">{showNote ? "Ukryj wyjaśnienie" : "Pokaż wyjaśnienie"}</button>
+        </div>
+        {showNote && (
+          <div className="mt-2 text-sm text-slate-800" dangerouslySetInnerHTML={{ __html: task.note }} />
+        )}
         {attempts[index] >= 3 && results[index] !== true && (
           <div className="mt-3 flex flex-wrap gap-2 items-center">
             <button onClick={() => { const canonical = prettify(task.answers[0]); const next = [...entries]; next[index] = canonical; setEntries(next); const copy = [...results]; copy[index] = true; setResults(copy); window.setTimeout(() => speakFrench(canonical), 0); }} className="text-xs px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100">Pokaż odpowiedź wzorcową</button>
