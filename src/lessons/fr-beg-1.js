@@ -1,6 +1,6 @@
 const lesson1 = {
   id: "fr-beg-1",
-  title: "Francuski — Poziom 1 (początkujący)",
+  title: "Francuski — Lekcja 1 (początkujący)",
   level: "Początkujący",
   description:
     "Zacznij mówić od razu, tłumacząc całe zdania. Ta lekcja skupia się na fundamentach: zaimki, être/avoir, czasowniki -er, rodzajniki i rodzaj, podstawowa negacja, pytania i grzeczne prośby.",

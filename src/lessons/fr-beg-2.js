@@ -1,6 +1,6 @@
 const lesson2 = {
   id: "fr-beg-2",
-  title: "Francuski — Poziom 2 (początkujący)",
+  title: "Francuski — Lekcja 2 (początkujący)",
   level: "Początkujący",
   description:
     "Rozszerzamy fundamenty: c’est / il est, il y a, ‘combien’, posiadanie (mon/ma/mes), liczba mnoga, negacja z ‘de’, wiek z ‘avoir’.",
