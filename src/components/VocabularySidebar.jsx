@@ -54,8 +54,7 @@ export default function VocabularySidebar({ lesson }) {
       return (
         v.fr.toLowerCase().includes(q) ||
         v.pl.toLowerCase().includes(q) ||
-        (v.ipa || "").toLowerCase().includes(q) ||
-        g.includes(q)
+        (v.ipa || "").toLowerCase().includes(q)
       );
     })
     .sort((a, b) => (Number(!!mastered[a.fr]) - Number(!!mastered[b.fr])) || a.fr.localeCompare(b.fr));
@@ -76,7 +75,7 @@ export default function VocabularySidebar({ lesson }) {
       <input
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Szukaj… (FR/PL/IPA/płeć)"
+        placeholder="Szukaj… (FR/PL/IPA)"
         className="w-full mb-2 px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400"
       />
       <ul className="space-y-2 max-h-[50vh] overflow-auto pr-1">
