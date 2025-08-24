@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build && cp dist/index.html dist/404.html",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "save": "zip -r -9 ../french_app_v2.zip . -x \"node_modules/*\" -x \".git/*\" -x \"dist/*\" -x \"docs/*\""
   },
   "dependencies": {
     "react": "^19.1.1",
